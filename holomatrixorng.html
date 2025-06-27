@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holo Matrix Button</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Button 4 - Holographic Purple */
+        .btn-holo {
+            position: relative;
+            padding: 20px 38px;
+            background: linear-gradient(45deg, #2a0845, #4a1575, #6a20a5);
+            border: 2px solid #b347d9;
+            color: #e6ccff;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 0 25px rgba(179, 71, 217, 0.4),
+                inset 0 0 25px rgba(179, 71, 217, 0.1);
+        }
+
+        .btn-holo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 400% 400%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: gradient-shift 4s ease infinite;
+            border-radius: 30px;
+        }
+
+        .btn-holo::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: linear-gradient(45deg, #2a0845, #4a1575, #6a20a5);
+            border-radius: 28px;
+            z-index: -1;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn-holo:hover {
+            transform: scale(1.08) rotateZ(2deg);
+            color: #ffffff;
+            text-shadow: 0 0 20px #b347d9;
+            box-shadow: 
+                0 0 50px rgba(179, 71, 217, 0.8),
+                inset 0 0 50px rgba(179, 71, 217, 0.3);
+        }
+
+        .btn-holo:hover::before {
+            opacity: 0.3;
+        }
+
+        .btn-holo:active {
+            transform: scale(1.02) rotateZ(1deg);
+            box-shadow: 
+                0 0 60px rgba(179, 71, 217, 1),
+                inset 0 0 60px rgba(179, 71, 217, 0.5);
+        }
+
+        @keyframes ripple-effect {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="btn-holo" onclick="handleClick(this)">Holo Matrix</button>
+
+    <script>
+        function handleClick(button) {
+            // Create ripple effect
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.animation = 'ripple-effect 0.6s ease-out';
+            ripple.style.background = 'radial-gradient(circle, rgba(179,71,217,0.6), transparent 70%)';
+            
+            button.style.position = 'relative';
+            button.appendChild(ripple);
+            
+            // Remove ripple after animation
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+            
+            console.log('Holo Matrix button clicked!');
+        }
+
+        // Add keyboard accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const focusedButton = document.activeElement;
+                if (focusedButton.tagName === 'BUTTON') {
+                    focusedButton.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
